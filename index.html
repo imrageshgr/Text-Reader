@@ -70,6 +70,76 @@
             </button>
           </div>
         </div>
+        <div class="source-tools">
+          <div class="source-tools-heading">
+            <div>
+              <span class="eyebrow">Bring your words</span>
+              <p class="source-help">Paste text or open a document. VoiceRead keeps processing on this device when possible.</p>
+            </div>
+            <label class="upload-button" for="fileInput">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" aria-hidden="true">
+                <path d="M12 16V4m0 0L7 9m5-5 5 5" />
+                <path d="M5 14v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5" />
+              </svg>
+              Open file
+            </label>
+            <input id="fileInput" class="visually-hidden" type="file" accept=".txt,.md,.markdown,.pdf,.png,.jpg,.jpeg,.webp,.bmp,.gif,text/plain,text/markdown,application/pdf,image/*" />
+          </div>
+          <div class="drop-zone" id="dropZone" tabindex="0" role="button" aria-label="Drop a text, PDF, or image file here, or choose a file">
+            <span class="drop-zone-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" width="22" height="22">
+                <path d="M7 3h7l4 4v14H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" />
+                <path d="M14 3v5h5M8 13h8M8 17h6" />
+              </svg>
+            </span>
+            <span><strong>Drop a file here</strong> or choose one above</span>
+            <small>TXT, Markdown, PDF, PNG, JPG, WEBP</small>
+          </div>
+          <div class="source-status" id="sourceStatus" role="status" aria-live="polite">
+            <span class="source-status-dot"></span>
+            <span id="sourceStatusText">Ready for a document</span>
+          </div>
+          <div class="processing-panel hidden" id="processingPanel" aria-live="polite">
+            <div class="processing-row">
+              <span id="processingLabel">Preparing document...</span>
+              <span id="processingPercent">0%</span>
+            </div>
+            <div class="processing-track"><div class="processing-fill" id="processingFill"></div></div>
+            <button class="text-button" id="cancelProcessingBtn" type="button">Cancel</button>
+          </div>
+          <div class="language-tools">
+            <div class="language-field">
+              <label class="control-label" for="sourceLanguage">Document language</label>
+              <select id="sourceLanguage">
+                <option value="auto">Detect automatically</option>
+                <option value="en">English</option>
+                <option value="kn">Kannada</option>
+                <option value="hi">Hindi</option>
+                <option value="ta">Tamil</option>
+                <option value="te">Telugu</option>
+              </select>
+            </div>
+            <div class="language-field">
+              <label class="control-label" for="targetLanguage">Read or translate to</label>
+              <select id="targetLanguage">
+                <option value="en">English reading</option>
+                <option value="kn">Kannada</option>
+                <option value="hi">Hindi</option>
+                <option value="ta">Tamil</option>
+                <option value="te">Telugu</option>
+              </select>
+            </div>
+            <button class="text-button translate-button" id="translateBtn" type="button" disabled>
+              Translate text
+            </button>
+          </div>
+          <p class="privacy-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" aria-hidden="true">
+              <rect x="5" y="10" width="14" height="10" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" />
+            </svg>
+            Files are processed in your browser. Translation is optional and uses an external service only when requested.
+          </p>
+        </div>
         <div class="textarea-wrapper">
           <textarea
             id="textInput"
@@ -80,7 +150,55 @@
             <span id="wordCount">0 words · 0 characters</span>
             <span id="estTime">~0 min read</span>
           </div>
+          <button class="read-aloud-action" id="readAloudBtn" type="button">
+            <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
+              <polygon points="5 3 19 12 5 21 5 3" />
+            </svg>
+            <svg class="icon-pause hidden" viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
+              <rect x="6" y="4" width="4" height="16" />
+              <rect x="14" y="4" width="4" height="16" />
+            </svg>
+            <span>Read aloud</span>
+          </button>
         </div>
+        <section class="understand-panel" aria-labelledby="understandTitle">
+          <div class="understand-heading">
+            <div>
+              <span class="eyebrow">Make it clear</span>
+              <h3 id="understandTitle">Understand a word or sentence</h3>
+              <p>Select text above or paste something here to see its meaning, pronunciation, translation, and usage.</p>
+            </div>
+            <span class="understand-badge">Dictionary + translation</span>
+          </div>
+          <div class="understand-input-row">
+            <input id="meaningInput" type="text" placeholder="Select or paste a word or sentence" autocomplete="off" />
+            <select id="meaningLanguage" aria-label="Meaning language">
+              <option value="kn">Kannada</option>
+              <option value="hi">Hindi</option>
+              <option value="ta">Tamil</option>
+              <option value="te">Telugu</option>
+              <option value="en">English</option>
+            </select>
+            <button class="text-button understand-button" id="understandBtn" type="button" data-tooltip="Explain the selected word or sentence" disabled>Explain</button>
+          </div>
+          <div class="meaning-result hidden" id="meaningResult" aria-live="polite">
+            <div class="meaning-result-header">
+              <strong id="meaningWord">Meaning</strong>
+              <button class="pronounce-button" id="pronounceBtn" type="button" title="Hear the pronunciation" aria-label="Hear the pronunciation">
+                <span aria-hidden="true">🔊</span>
+                Hear word
+              </button>
+            </div>
+            <p class="pronunciation" id="meaningPronunciation"></p>
+            <p id="meaningDefinition"></p>
+            <p class="meaning-translation" id="meaningTranslation"></p>
+            <div class="usage-example hidden" id="meaningExample">
+              <span>Example</span>
+              <p id="meaningExampleText"></p>
+            </div>
+          </div>
+          <p class="meaning-note" id="meaningNote">Select a word or sentence to begin.</p>
+        </section>
       </section>
 
       <!-- Controls Panel -->
@@ -106,6 +224,7 @@
               <polyline points="6 9 12 15 18 9"/>
             </svg>
           </div>
+          <p class="voice-help" id="voiceHelp">Loading voices from your browser...</p>
         </div>
 
         <!-- Speed Control -->
@@ -174,7 +293,7 @@
 
     </main>
 
-    <!-- Playback Visualizer -->
+    <!-- Legacy playback display kept for state updates, hidden from the interface -->
     <section class="visualizer-section" id="visualizerSection">
       <div class="waveform" id="waveform">
         <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
@@ -186,7 +305,7 @@
         <div class="wave-bar"></div><div class="wave-bar"></div>
       </div>
       <div class="current-sentence" id="currentSentence">
-        <span id="currentSentenceText">Waiting for text...</span>
+            <span id="currentSentenceText">Select text to read</span>
       </div>
     </section>
 
@@ -290,7 +409,7 @@
 
         <!-- Word-highlighted sentence display -->
         <div class="fs-sentence-box" id="fsSentenceBox">
-          <p class="fs-sentence" id="fsSentence">Press Play to start reading...</p>
+          <p class="fs-sentence" id="fsSentence">Select text to read</p>
         </div>
       </div>
 
@@ -327,6 +446,8 @@
 
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
